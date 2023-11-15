@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Event, nip19 } from 'nostr-tools'
-import { attachFile } from '@/utils/FileUpload';
+import { attachFile, renderMedia} from '@/utils/FileUpload';
 import { getProfileMetadataEvents, publishUser } from '@/utils/tools';
 import { UnsignedEvent } from 'nostr-tools';
 
@@ -10,7 +10,7 @@ const parseProfileMetadata = (events: Event[]) => {
 
     events.forEach(event => {
         const followingPubKey = event.tags.filter(tag => tag[0] === 'p').map(tag => tag[1]);
-        const relays = JSON.parse(event.content);
+        const relays = event.content ? JSON.parse(event.content) : {};
 
         followingPubKey.forEach(key => followingPubKeySet.add(key));
         for (let url in relays) {
@@ -21,7 +21,7 @@ const parseProfileMetadata = (events: Event[]) => {
     return { followingPubKey: Array.from(followingPubKeySet), relays: Array.from(relaysMap.entries()) };
 }
 
-const Form = ({ pubkey }: { pubkey: string })  => {
+const Form = ({ pubkey }: { pubkey: string }) => {
     const [name, setName] = useState("");
     const [file, setFile] = useState("");
     const [profileNetadata, setProfileMetadata] = useState<Event[]>([]);
@@ -38,18 +38,19 @@ const Form = ({ pubkey }: { pubkey: string })  => {
 
         fetchProfileMetadata();
     }, [pubkey]);
-    const {followingPubKey, relays} = parseProfileMetadata(profileNetadata)
+    const { followingPubKey, relays } = parseProfileMetadata(profileNetadata)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const relay_urls = relays.map(([url, _]) => url);
+        let relayObject = Object.fromEntries(relays);
 
         let unsignedProfileMetadata: UnsignedEvent = {
             pubkey: '',
             kind: 3,
             tags: [],
-            content: JSON.stringify(relays),
+            content: JSON.stringify(relayObject),
             created_at: Math.floor(Date.now() / 1000),
         }
         followingPubKey.forEach(pubkey => unsignedProfileMetadata.tags.push(['p', pubkey]));
@@ -60,11 +61,11 @@ const Form = ({ pubkey }: { pubkey: string })  => {
             metadataContent.name = name;
             metadataContent.display_name = name;
         }
-    
+
         if (file) {
             metadataContent.picture = file;
         }
-    
+
         let unsignedMetadata: UnsignedEvent = {
             pubkey: '',
             kind: 0,
@@ -72,7 +73,7 @@ const Form = ({ pubkey }: { pubkey: string })  => {
             content: JSON.stringify(metadataContent),
             created_at: Math.floor(Date.now() / 1000),
         }
-        
+
         let pk;
         if (name || file) {
             pk = await publishUser(unsignedProfileMetadata, relay_urls, unsignedMetadata);
@@ -110,10 +111,16 @@ const Form = ({ pubkey }: { pubkey: string })  => {
                                 }
                             }}
                         />
+                        {renderMedia(file)}
+                        {uploadingFile ? (
+                            <div className="flex animate-pulse text-sm">
+                                <span>Uploading...</span>
+                            </div>
+                        ) : null}
                     </div>
                     <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-zinc-400 disabled:pointer-events-none dark:focus:ring-offset-zinc-900 data-[state=open]:bg-zinc-100 dark:data-[state=open]:bg-zinc-800 text-white hover:bg-zinc-700 dark:text-zinc-900 h-10 py-2 px-4 bg-blue-400 dark:bg-blue-400 dark:hover:bg-blue-500 dark:hover:text-black">Generate key</button>
                 </form>
-                <span>{pk}</span>
+                <span onClick={() => navigator.clipboard.writeText(pk)}>{pk}</span>
             </div>
         </div>
     );

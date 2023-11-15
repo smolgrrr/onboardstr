@@ -37,9 +37,9 @@ const Referrer = ({ pubkey }: { pubkey: string }) => {
     const metadataParsed = metadata ? parseMetadata(metadata) : null;
 
     return (
-        <div className='mx-auto flex w-full flex-col justify-center space-y-3 sm:w-[350px]'>
+        <div className='mx-auto flex w-full flex-col justify-center space-y-3 sm:w-[350px] pb-8'>
             <span className='text-xl font-medium'>Referrer: </span>
-            <div className="pb-8 flex items-center mx-auto">
+            <div className="flex items-center mx-auto">
                 {metadataParsed &&
                     <>
                         <img
@@ -52,7 +52,9 @@ const Referrer = ({ pubkey }: { pubkey: string }) => {
                     </>
                 }
             </div>
-            
+            <p>
+                You will start Nostr with the same follow list and relays as {(metadataParsed && metadataParsed.name) ? metadataParsed.name : 'your friend'}
+            </p>
         </div>
     );
 };

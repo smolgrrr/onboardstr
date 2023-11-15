@@ -7,6 +7,33 @@ export interface UploadResult {
    * Upload file to void.cat
    * https://void.cat/swagger/index.html
    */
+
+  export const renderMedia = (file: string) => {
+    if (file && (file.endsWith(".mp4") || file.endsWith(".webm"))) {
+      return (
+        <video
+          controls
+          muted
+          src={file + "#t=0.1"}
+          preload="metadata"
+          className="thumb mt-2 rounded-md w-full"
+        >
+          <source src={file} type="video/mp4" />
+        </video>
+      );
+    } else if (!file.includes("http")) {
+      return <></>;
+    } else {
+      return (
+        <img
+          alt="Invalid thread"
+          loading="lazy"
+          className="thumb mt-2 rounded-md w-full"
+          src={file}
+        />
+      );
+    }
+  };
   
   export default async function FileUpload(file: File): Promise<UploadResult> {
     const buf = await file.arrayBuffer();

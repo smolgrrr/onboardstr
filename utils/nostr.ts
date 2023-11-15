@@ -6,14 +6,8 @@ export const fallbackRelays = [
   'wss://eden.nostr.land',
   'wss://atlas.nostr.land',
   'wss://relay.snort.social',
-  'wss://nostr.fly.dev',
-  'wss://nostr.nostr.band',
-  'wss://relay.nostrgraph.net',
   'wss://relay.nostr.bg',
   'wss://nostr.wine',
   'wss://nos.lol',
-  'wss://relay.mostr.pub',
-  'wss://no.str.cr',
-  'wss://brb.io',
-  'wss://nostr.zebedee.cloud'
+  'wss://relay.mostr.pub'
 ]

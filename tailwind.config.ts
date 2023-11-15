@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
-        'gradient-xy': 'gradient-xy 10s ease infinite',
+        'gradient-xy': 'gradient-xy 8s ease infinite',
       },
       keyframes: {
         'gradient-xy': {
