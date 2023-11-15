@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function Home() {
+export default function Invalidnpub() {
   const [npub, setNpub] = useState('');
   const router = useRouter();
 
@@ -19,7 +19,7 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center p-24 ${inter.className}`}
     >
-      <h1>Enter your npub to onboard a friend to nostr</h1>
+      <h1>Invalid npub (try again): </h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

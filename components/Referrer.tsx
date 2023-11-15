@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { nip19, Event } from 'nostr-tools'
-import { getMetadata } from '@/utils/get-event';
+import { Event } from 'nostr-tools'
+import { getMetadata } from '@/utils/tools';
 
 interface Metadata {
     name?: string
@@ -20,25 +20,26 @@ const parseMetadata = (event: Event) => {
     return metadata
 }
 
-const Referrer = ({ id }: { id: string }) => {
+const Referrer = ({ pubkey }: { pubkey: string }) => {
     const [metadata, setMetadata] = useState<Event>();
-    const pubkey = nip19.decode(id)
 
     useEffect(() => {
         const fetchMetadata = async () => {
-            const data = await getMetadata(pubkey.data as string, []);
+            console.log(pubkey)
+            const data = await getMetadata(pubkey, []);
             if (data) {
                 setMetadata(data);
             }
         };
 
         fetchMetadata();
-    }, [id]);
+    }, [pubkey]);
     const metadataParsed = metadata ? parseMetadata(metadata) : null;
 
     return (
-        <div>
-            <div className="pb-8 flex items-center">
+        <div className='mx-auto flex w-full flex-col justify-center space-y-3 sm:w-[350px]'>
+            <span className='text-xl font-medium'>Referrer: </span>
+            <div className="pb-8 flex items-center mx-auto">
                 {metadataParsed &&
                     <>
                         <img
