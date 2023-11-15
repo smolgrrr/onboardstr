@@ -28,7 +28,7 @@ export interface UploadResult {
         <img
           alt="Invalid thread"
           loading="lazy"
-          className="thumb mt-2 rounded-md w-full"
+          className="thumb mt-2 h-32 w-32 overflow-hidden rounded-full mx-auto"
           src={file}
         />
       );

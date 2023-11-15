@@ -3,6 +3,7 @@ import { Event, nip19 } from 'nostr-tools'
 import { attachFile, renderMedia} from '@/utils/FileUpload';
 import { getProfileMetadataEvents, publishUser } from '@/utils/tools';
 import { UnsignedEvent } from 'nostr-tools';
+import JSConfetti from 'js-confetti'
 
 const parseProfileMetadata = (events: Event[]) => {
     let followingPubKeySet = new Set<string>();
@@ -21,14 +22,20 @@ const parseProfileMetadata = (events: Event[]) => {
     return { followingPubKey: Array.from(followingPubKeySet), relays: Array.from(relaysMap.entries()) };
 }
 
+let jsConfetti: JSConfetti;
+
 const Form = ({ pubkey }: { pubkey: string }) => {
     const [name, setName] = useState("");
     const [file, setFile] = useState("");
     const [profileNetadata, setProfileMetadata] = useState<Event[]>([]);
     const [uploadingFile, setUploadingFile] = useState(false);
-    const [pk, setPK] = useState('')
+    const [sk, setSK] = useState('')
 
     useEffect(() => {
+        import('js-confetti').then((module) => {
+            jsConfetti = new module.default();
+          });
+
         const fetchProfileMetadata = async () => {
             const data = await getProfileMetadataEvents(pubkey, []);
             if (data.length > 0) {
@@ -42,6 +49,7 @@ const Form = ({ pubkey }: { pubkey: string }) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        jsConfetti.addConfetti()
 
         const relay_urls = relays.map(([url, _]) => url);
         let relayObject = Object.fromEntries(relays);
@@ -74,18 +82,19 @@ const Form = ({ pubkey }: { pubkey: string }) => {
             created_at: Math.floor(Date.now() / 1000),
         }
 
-        let pk;
+        let sk;
         if (name || file) {
-            pk = await publishUser(unsignedProfileMetadata, relay_urls, unsignedMetadata);
+            sk = await publishUser(unsignedProfileMetadata, relay_urls, unsignedMetadata);
         } else {
-            pk = await publishUser(unsignedProfileMetadata, relay_urls);
+            sk = await publishUser(unsignedProfileMetadata, relay_urls);
         }
-        setPK(nip19.nsecEncode(pk as string));
+        setSK(nip19.nsecEncode(sk as string));
     };
 
     return (
         <div>
             <div className="mx-auto flex w-full flex-col justify-center space-y-3 sm:w-[350px]">
+                {sk && <span className="hover:cursor-pointer" onClick={() => navigator.clipboard.writeText(sk)}>Here's your secret key: {sk}</span>}
                 <h1 className="text-xl font-medium">Create NOSTR Account</h1>
                 <form className="grid gap-6" name="post" method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <input type="hidden" name="MAX_FILE_SIZE" defaultValue={4194304} />
@@ -120,7 +129,6 @@ const Form = ({ pubkey }: { pubkey: string }) => {
                     </div>
                     <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-zinc-400 disabled:pointer-events-none dark:focus:ring-offset-zinc-900 data-[state=open]:bg-zinc-100 dark:data-[state=open]:bg-zinc-800 text-white hover:bg-zinc-700 dark:text-zinc-900 h-10 py-2 px-4 bg-blue-400 dark:bg-blue-400 dark:hover:bg-blue-500 dark:hover:text-black">Generate key</button>
                 </form>
-                <span onClick={() => navigator.clipboard.writeText(pk)}>{pk}</span>
             </div>
         </div>
     );

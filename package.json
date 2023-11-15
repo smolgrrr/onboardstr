@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "js-confetti": "^0.11.0",
     "next": "14.0.2",
     "nostr-tools": "^1.17.0",
     "react": "^18",

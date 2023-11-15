@@ -70,52 +70,5 @@ export async function publishUser(profileMetadata: UnsignedEvent, relays: string
     }
   });
 
-  // const relayMap = new Map<string, Relay>();
-  // const relayPromises = relays.map(url => {
-  //   return new Promise<Relay>((resolve, reject) => {
-  //     const relay = relayInit(url);
-  //     relay.on('connect', () => {
-  //       console.info(`connected to ${relay.url}`);
-  //       resolve(relay);
-  //     });
-  //     relay.on('error', () => {
-  //       console.warn(`failed to connect to ${relay.url}`);
-  //       reject(`failed to connect to ${relay.url}`);
-  //     });
-  //     try {
-  //       relay.connect();
-  //       if (metadata) {
-  //         relay.publish(signedMetadata);
-  //         console.info(`${relay.url} has accepted our event: ${signedMetadata.id}`);
-  //       }
-  //       relay.publish(signedProfileMetadata);
-  //     } catch {
-  //       console.warn(`could not connect to ${url}`);
-  //       reject(`could not connect to ${url}`);
-  //     }
-  //   });
-  // });
-
-  // Promise.all(relayPromises).then(relays => {
-  //   relays.forEach(relay => {
-  //     relayMap.set(relay.url, relay);
-  //   });
-
-  //   relayMap.forEach(async (relay, url) => {
-  //     try {
-  //       if (metadata) {
-  //         relay.publish(signedMetadata);
-  //         console.info(`${relay.url} has accepted our event: ${signedMetadata.id}`);
-  //       }
-  //       await relay.publish(signedProfileMetadata);
-  //       console.info(`${relay.url} has accepted our event: ${signedProfileMetadata.id}`);
-  //     } catch (reason) {
-  //       console.error(`failed to publish to ${relay.url}: ${reason}`);
-  //     }
-  //   });
-  // }).catch(error => {
-  //   console.error(error);
-  // });
-
   return sk
 }
