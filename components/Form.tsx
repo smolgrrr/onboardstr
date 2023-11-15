@@ -94,7 +94,7 @@ const Form = ({ pubkey }: { pubkey: string }) => {
     return (
         <div>
             <div className="mx-auto flex w-full flex-col justify-center space-y-3 sm:w-[350px]">
-                {sk && <span className="hover:cursor-pointer" onClick={() => navigator.clipboard.writeText(sk)}>Here's your secret key: {sk}</span>}
+                {sk && <span className="hover:cursor-pointer" onClick={() => navigator.clipboard.writeText(sk)}>Here&apos;s your secret key: {sk}</span>}
                 <h1 className="text-xl font-medium">Create NOSTR Account</h1>
                 <form className="grid gap-6" name="post" method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <input type="hidden" name="MAX_FILE_SIZE" defaultValue={4194304} />
