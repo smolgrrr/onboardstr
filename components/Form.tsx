@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Event, nip19 } from 'nostr-tools'
-import { attachFile, renderMedia} from '@/utils/FileUpload';
+import { attachFile, renderMedia } from '@/utils/FileUpload';
 import { getProfileMetadataEvents, publishUser } from '@/utils/tools';
 import { UnsignedEvent } from 'nostr-tools';
 import JSConfetti from 'js-confetti'
@@ -24,7 +24,7 @@ const parseProfileMetadata = (events: Event[]) => {
 
 let jsConfetti: JSConfetti;
 
-const Form = ({ pubkey }: { pubkey: string }) => {
+const Form = ({ pubkey, setSk }: { pubkey: string, setSk: (sk: string) => void }) => {
     const [name, setName] = useState("");
     const [file, setFile] = useState("");
     const [profileNetadata, setProfileMetadata] = useState<Event[]>([]);
@@ -34,7 +34,7 @@ const Form = ({ pubkey }: { pubkey: string }) => {
     useEffect(() => {
         import('js-confetti').then((module) => {
             jsConfetti = new module.default();
-          });
+        });
 
         const fetchProfileMetadata = async () => {
             const data = await getProfileMetadataEvents(pubkey, []);
