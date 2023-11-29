@@ -29,7 +29,6 @@ const Form = ({ pubkey, setSk }: { pubkey: string, setSk: (sk: string) => void }
     const [file, setFile] = useState("");
     const [profileNetadata, setProfileMetadata] = useState<Event[]>([]);
     const [uploadingFile, setUploadingFile] = useState(false);
-    const [sk, setSK] = useState('')
 
     useEffect(() => {
         import('js-confetti').then((module) => {
@@ -88,13 +87,12 @@ const Form = ({ pubkey, setSk }: { pubkey: string, setSk: (sk: string) => void }
         } else {
             sk = await publishUser(unsignedProfileMetadata, relay_urls);
         }
-        setSK(nip19.nsecEncode(sk as string));
+        setSk(nip19.nsecEncode(sk as string));
     };
 
     return (
         <div>
             <div className="mx-auto flex w-full flex-col justify-center space-y-3 sm:w-[350px]">
-                {sk && <span className="hover:cursor-pointer" onClick={() => navigator.clipboard.writeText(sk)}>Here&apos;s your secret key: {sk}</span>}
                 <h1 className="text-xl font-medium">Create NOSTR Account</h1>
                 <form className="grid gap-6" name="post" method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <input type="hidden" name="MAX_FILE_SIZE" defaultValue={4194304} />
