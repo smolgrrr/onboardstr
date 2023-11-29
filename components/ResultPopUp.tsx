@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { LuCopy, LuCopyCheck } from 'react-icons/Lu';
+import { MdOutlineCopyAll, MdCheckBox } from 'react-icons/md';
 
 const Result = ({ secret, client }: { secret: string, client: string | undefined}) => {
     let [isOpen, setIsOpen] = useState(true)
@@ -63,7 +63,7 @@ const Result = ({ secret, client }: { secret: string, client: string | undefined
                       </p>
                     </div>
                     <div className="mt-2 flex" onClick={() => copyToClipboard(secret)} >
-                    {isCopied ? <LuCopyCheck size={48}/> : <LuCopy size={48}/>} <span className="overflow-scroll my-auto px-2">{secret}</span>
+                    {isCopied ? <MdCheckBox size={36}/> : <MdOutlineCopyAll size={36}/>} <span className="overflow-scroll my-auto px-2">{secret}</span>
                     </div>
                     <p className="pt-4 text-sm text-gray-500">
                         You can use this key to log into any NOSTR client
