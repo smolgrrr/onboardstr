@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { MdOutlineCopyAll, MdCheckBox } from 'react-icons/md';
 
-const Result = ({ secret, client }: { secret: string, client: string | undefined}) => {
+const Result = ({ secret, client }: { secret: string, client?: string | undefined}) => {
     let [isOpen, setIsOpen] = useState(true)
     let [isCopied, setIsCopied] = useState(false)
 

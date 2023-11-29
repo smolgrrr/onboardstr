@@ -18,7 +18,7 @@ export default function Home() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(`/${npub}/${btoa(refClient)}`);
+    router.push(`/${npub}/${btoa(refClient || clients[0][0])}`);
   };
 
   return (
